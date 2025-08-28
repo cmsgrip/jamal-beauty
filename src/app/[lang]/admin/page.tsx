@@ -1,25 +1,32 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { IProduct } from '@/models/Product';
 import ProductForm from '@/components/ProductForm';
 import { useTranslation } from 'react-i18next';
 
-export default function AdminPage({ params: { lang } }: { params: { lang: string } }) {
+// Define a clear type for the page props
+type AdminPageProps = {
+  params: { lang: string };
+};
+
+export default function AdminPage({ params: { lang } }: AdminPageProps) {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const { t } = useTranslation('common');
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
+  // Wrap fetchProducts in useCallback to stabilize the function
+  const fetchProducts = useCallback(async () => {
     const res = await fetch(`/${lang}/api/products`);
     const data = await res.json();
     setProducts(data.data);
-  };
+  }, [lang]);
+
+  // Add fetchProducts to the dependency array to fix the warning
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const handleFormSubmit = async (product: Partial<IProduct>) => {
     const method = selectedProduct ? 'PUT' : 'POST';
