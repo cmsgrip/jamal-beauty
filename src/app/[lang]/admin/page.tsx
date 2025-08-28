@@ -4,7 +4,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { IProduct } from '@/models/Product';
 import ProductForm from '@/components/ProductForm';
-import { useTranslation } from 'react-i18next';
 
 // Define a clear type for the page props
 type AdminPageProps = {
@@ -14,16 +13,13 @@ type AdminPageProps = {
 export default function AdminPage({ params: { lang } }: AdminPageProps) {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
-  const { t } = useTranslation('common');
 
-  // Wrap fetchProducts in useCallback to stabilize the function
   const fetchProducts = useCallback(async () => {
     const res = await fetch(`/${lang}/api/products`);
     const data = await res.json();
     setProducts(data.data);
   }, [lang]);
 
-  // Add fetchProducts to the dependency array to fix the warning
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
@@ -62,11 +58,11 @@ export default function AdminPage({ params: { lang } }: AdminPageProps) {
 
   return (
     <div className="container mx-auto py-16">
-      <h1 className="text-4xl font-serif mb-8">{t('admin_panel')}</h1>
+      <h1 className="text-4xl font-serif mb-8">Admin Panel</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <h2 className="text-2xl font-serif mb-4">
-            {selectedProduct ? t('edit_product') : t('add_product')}
+            {selectedProduct ? 'Edit Product' : 'Add Product'}
           </h2>
           <ProductForm
             product={selectedProduct}
@@ -74,7 +70,7 @@ export default function AdminPage({ params: { lang } }: AdminPageProps) {
           />
         </div>
         <div>
-          <h2 className="text-2xl font-serif mb-4">{t('products')}</h2>
+          <h2 className="text-2xl font-serif mb-4">Products</h2>
           <div className="space-y-4">
             {products.map((product) => (
               <div key={product._id} className="border p-4 rounded-lg flex justify-between items-center">
@@ -87,13 +83,13 @@ export default function AdminPage({ params: { lang } }: AdminPageProps) {
                     onClick={() => handleEdit(product)}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   >
-                    {t('edit')}
+                    Edit
                   </button>
                   <button
                     onClick={() => handleDelete(product._id)}
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                   >
-                    {t('delete')}
+                    Delete
                   </button>
                 </div>
               </div>
