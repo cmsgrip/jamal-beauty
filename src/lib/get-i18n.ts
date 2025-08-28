@@ -1,5 +1,5 @@
 
-import { createInstance } from 'i18next';
+import { createInstance, Instance, Resource } from 'i18next';
 import resourcesToBackend from 'i18next-resources-to-backend';
 import { initReactI18next } from 'react-i18next/initReactI18next';
 import { i18n } from '../../i18n-config';
@@ -7,8 +7,8 @@ import { i18n } from '../../i18n-config';
 const initTranslations = async (
   locale: string,
   namespaces: string[],
-  i18nInstance?: any,
-  resources?: any
+  i18nInstance?: Instance,
+  resources?: Resource
 ) => {
   i18nInstance = i18nInstance || createInstance();
 
