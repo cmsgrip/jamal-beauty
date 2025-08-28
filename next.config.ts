@@ -1,9 +1,5 @@
 import type { NextConfig } from "next";
-import { i18n } from './i18n-config';
 
-const nextConfig: NextConfig = {
-  i18n,
-  srcDir: './src',
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;
